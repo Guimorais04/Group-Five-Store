@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang "en">
-    <head>
-        <meta charsete "UTF-8">
-        <meta http-equive="x-UA-Compatible" content "IE-edge">
-        <meta name"viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-    </head>
-    <body>
-        <h1>Ciencia e aprendizado de maquina
-        
-            Exploração e pré Processamento de Dados
+EXOLORAÇÃO DE DADOS E PRÉ PROCESSAMENTO
             
             import pandas as pd
             from sklearn.model_selection import train_test_split
@@ -19,6 +8,42 @@
 
 
             data = pd.read_csv("five stroe.csv")
-        </h1>
-    </body>
-</html>
+
+            data.head()
+
+            X_simple = data[['Weekly_Sales']]
+           y = data['Fuel_Price']
+
+           # Dividir o dataset em 80% treino e 20% teste
+           X_train, X_test, y_train, y_test = train_test_split(X_simple, y, test_size=0.2, random_state=42)
+
+           # Inicializar e treinar o modelo de Regressão Linear
+           model_regression = LinearRegression()
+           model_regression.fit(X_train, y_train)
+
+           # Fazer previsões no conjunto de teste
+           y_pred = model_regression.predict(X_test)
+
+           # Calcular MAE e MSE
+           mae = mean_absolute_error(y_test, y_pred)
+           mse = mean_squared_error(y_test, y_pred)
+
+           # Calcular a porcentagem de erro para MAE e MSE
+           mae_percentage = (mae / y_test.mean()) * 100
+           mse_percentage = (mse / y_test.mean()) * 100
+
+           # Exibir os resultados das métricas de erro e suas porcentagens
+           print("Erro Médio Absoluto (MAE):", mae)
+           print("Erro Quadrático Médio (MSE):", mse)
+           print("Porcentagem de Erro MAE:", mae_percentage, "%")
+           print("Porcentagem de Erro MSE:", mse_percentage, "%")
+
+           # Plotar gráfico de dispersão para comparar valores reais e previstos
+           plt.figure(figsize=(10, 6))
+           plt.scatter(X_test, y_test, color='blue', label='Valor Real', alpha=0.5)
+           plt.plot(X_test, y_pred, color='red', label='Valor Previsto', alpha=0.5)
+           plt.xlabel('Weekly_Sales')
+           plt.ylabel('Fuel_Price')
+           plt.title('Regressão Linear com uma Feature ou Recurso')
+           plt.legend()
+           plt.show()
