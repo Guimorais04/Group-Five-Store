@@ -1,49 +1,128 @@
 EXOLORAÇÃO DE DADOS E PRÉ PROCESSAMENTO
             
-            import pandas as pd
-            from sklearn.model_selection import train_test_split
-            from sklearn.linear_model import LinearRegression
-            from sklearn.metrics import mean_absolute_error, mean_squared_error
-            import matplotlib.pyplot as plt
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error,mean_squared_error,r2_score
 
+data = pd.read_csv('/content/five store (1).csv')
 
-            data = pd.read_csv("five stroe.csv")
+# Verificar as primeiras linhas do DataFrame
+data.head()
 
-            data.head()
+# Verificar tipos de dados e valores ausentes
+print(data.info())
 
-            X_simple = data[['Weekly_Sales']]
-           y = data['Fuel_Price']
+# Verificar valores ausentes nas colunas de interesse
+print(data[['Weekly_Sales', 'Fuel_Price']].isnull().sum())
 
-           # Dividir o dataset em 80% treino e 20% teste
-           X_train, X_test, y_train, y_test = train_test_split(X_simple, y, test_size=0.2, random_state=42)
+# IMPLEMENTAÇÃO DE MODELOS DE APRENDIZADO DE MÁQUINA DE REGRESSÂO LINEAR
 
-           # Inicializar e treinar o modelo de Regressão Linear
-           model_regression = LinearRegression()
-           model_regression.fit(X_train, y_train)
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-           # Fazer previsões no conjunto de teste
-           y_pred = model_regression.predict(X_test)
+# Criar um gráfico de dispersão
+sns.scatterplot(x=data['Fuel_Price'], y=data['Weekly_Sales'])
+plt.title('Relação entre Fuel_Price e Weekly_Sales')
+plt.xlabel('Fuel_Price')
+plt.ylabel('Weekly_Sales')
+plt.show()
 
-           # Calcular MAE e MSE
-           mae = mean_absolute_error(y_test, y_pred)
-           mse = mean_squared_error(y_test, y_pred)
+# Adicionando a linha de regressão linear no gráfico
+sns.regplot(x='Fuel_Price', y='Weekly_Sales', data=data, scatter_kws={'s': 50}, line_kws={"color": "red"})
+plt.title('Relação entre Fuel_Price e Weekly_Sales com Linha de Regressão')
+plt.xlabel('Fuel_Price')
+plt.ylabel('Weekly_Sales')
+plt.show()
 
-           # Calcular a porcentagem de erro para MAE e MSE
-           mae_percentage = (mae / y_test.mean()) * 100
-           mse_percentage = (mse / y_test.mean()) * 100
+# Boxplot de Weekly_Sales
+plt.figure(figsize=(8, 6))
+sns.boxplot(x=data['Weekly_Sales'], color='blue')
+plt.title('Boxplot de Vendas Semanais (Weekly_Sales)')
+plt.xlabel('Weekly_Sales')
+plt.show()
 
-           # Exibir os resultados das métricas de erro e suas porcentagens
-           print("Erro Médio Absoluto (MAE):", mae)
-           print("Erro Quadrático Médio (MSE):", mse)
-           print("Porcentagem de Erro MAE:", mae_percentage, "%")
-           print("Porcentagem de Erro MSE:", mse_percentage, "%")
+# Boxplot de Fuel_Price
+plt.figure(figsize=(8, 6))
+sns.boxplot(x=data['Fuel_Price'], color='green')
+plt.title('Boxplot de Fuel_Price')
+plt.xlabel('Fuel_Price')
+plt.show()
 
-           # Plotar gráfico de dispersão para comparar valores reais e previstos
-           plt.figure(figsize=(10, 6))
-           plt.scatter(X_test, y_test, color='blue', label='Valor Real', alpha=0.5)
-           plt.plot(X_test, y_pred, color='red', label='Valor Previsto', alpha=0.5)
-           plt.xlabel('Weekly_Sales')
-           plt.ylabel('Fuel_Price')
-           plt.title('Regressão Linear com uma Feature ou Recurso')
-           plt.legend()
-           plt.show()
+# declaração de x y
+X_simple = data[['Weekly_Sales']]
+y = data['Fuel_Price']
+
+# 80% treino 20% teste
+X_train, X_test, y_train, y_test = train_test_split(X_simple, y, test_size=0.2, random_state=42)
+
+# Inicializar e treinar o modelo de Regressão Linear
+model_regression = LinearRegression()
+model_regression.fit(X_train, y_train)
+
+# Fazer previsões no conjunto de teste
+y_pred = model_regression.predict(X_test)
+
+# Calcular MAE e MSE
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+
+# Calcular a porcentagem de erro para MAE e MSE
+mae_percentage = (mae / y_test.mean()) * 100
+mse_percentage = (mse / y_test.mean()) * 100
+
+# Exibir os resultados das métricas de erro e suas porcentagens
+print("Erro Médio Absoluto (MAE):", mae)
+print("Erro Quadrático Médio (MSE):", mse)
+print("Porcentagem de Erro MAE:", mae_percentage, "%")
+print("Porcentagem de Erro MSE:", mse_percentage, "%")
+
+# Plotar gráfico de dispersão para comparar valores reais e previstos
+plt.figure(figsize=(10, 6))
+plt.scatter(X_test, y_test, color='blue', label='Valor Real', alpha=0.5)
+plt.plot(X_test, y_pred, color='red', label='Valor Previsto', alpha=0.5)
+plt.xlabel('Median Income')
+plt.ylabel('Median House Value')
+plt.title('Regressão Linear com uma Feature ou Recurso')
+plt.legend()
+plt.show()
+
+# IMPLEMENTAÇÃO DE MODELOS DE APRENDIZADO DE MAQUINA DE CLASSIFICAÇÃO
+
+# matriz confusão
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Transformar o target em categorias
+y_classification = pd.cut(data['Weekly_Sales'], bins=3, labels=['baixo', 'médio', 'alto'])
+X_simple = data[['Fuel_Price']]
+
+# Dividir os dados
+X_train, X_test, y_train, y_test = train_test_split(X_simple, y_classification, test_size=0.2, random_state=42)
+
+# Treinar o modelo KNN
+model_knn = KNeighborsClassifier(n_neighbors=5)
+model_knn.fit(X_train, y_train)
+
+# Previsões e avaliação
+y_pred = model_knn.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='weighted')
+recall = recall_score(y_test, y_pred, average='weighted')
+f1 = f1_score(y_test, y_pred, average='weighted')
+
+print("Acurácia:", accuracy)
+print("Precisão:", precision)
+print("Recall:", recall)
+print("F1-score:", f1)
+
+# Matriz de Confusão
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", cbar=False)
+plt.xlabel('Predicted labels')
+plt.ylabel('True labels')
+plt.title('Matriz de Confusão')
+plt.show()
