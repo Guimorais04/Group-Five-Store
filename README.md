@@ -1,4 +1,28 @@
 # Empresa-Projeto
+
+COLABORADORES:
+Robson Costa Dos Santos
+RA:2224100282
+ 
+Guilherme Morais Santos
+RA:2224100260
+ 
+Paulo Henrique Dos Santos Oliveira
+RA: 2224106119
+ 
+Erik Araújo De Souza
+RA: 2224108241
+ 
+Giovanni Ângelo Dos Santos
+RA: 2224106572
+ 
+Matheus Davi Teixeira Da Silva
+RA: 2224100390
+ 
+Ryan Alves Silva
+RA: 2223207226
+
+
 EMPRESA 
 
 NOME: Group Five Store
